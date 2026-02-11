@@ -1,28 +1,14 @@
-// The code is a function that generates a table of datetimes between two datetimes with a configurable span length.
-// The function takes the following parameters:
-//  - MyStartDate: The starting datetime [required].
-//  - MyEndDate: The ending datetime. If not provided or 'null', dynamically the 'current date and time' will be used.
-//  - ElementsToAdd: The number of additional elements to add to the list. If not provided or 'null', no additional elements will be added.
-//  - Step: The time span between each date in the list. If not provided or 'null', a default step of 1 day will be used.
-// Example:
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0))
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0), null, null, null)
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0), #datetime(2023,1,2, 0, 0, 0))
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0), #datetime(2023,1,2, 0, 0, 0),7)
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0), null, 7)
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0), null, 7, #duration(1, 0, 0, 0))
-//  = FxDateTimes(#datetime(2023,1,1, 0, 0, 0), #datetime(2023,1,2, 0, 0, 0),7, #duration(0, 1, 0, 0))
+(TheStartDate as datetime, optional TheEndDate as datetime, optional Interval as duration, optional ElementsToAdd as number) as table =>
 let
-    Source = (MyStartDate as datetime, optional MyEndDate as datetime, optional ElementsToAdd as number, optional Step as duration) => let
-		MyEndDate = if MyEndDate is null then DateTime.LocalNow() else MyEndDate,
-		ElementsToAdd = if ElementsToAdd is null then 0 else ElementsToAdd,
-		Step = if Step is null then #duration(1,0,0,0) else Step,
-		numberOfDays = Duration.From(MyEndDate - MyStartDate),
-		numberOfElements = Number.RoundUp(numberOfDays / Step) + 1 + ElementsToAdd,
-		datesList = List.DateTimes(MyStartDate, numberOfElements, Step),
-		datesTable = Table.FromList(datesList, Splitter.SplitByNothing(), {"Dates"}, null, ExtraValues.Error),
-		MyTimeTable = Table.TransformColumnTypes(datesTable, {{"Dates", type datetime}})
-    in
-        MyTimeTable
+    TheEndDate = if TheEndDate is null then DateTime.LocalNow() else TheEndDate,
+	MyStartDate = List.Min({TheStartDate, TheEndDate}),
+	MyEndDate = List.Max({TheStartDate, TheEndDate}),
+	ElementsToAdd = if ElementsToAdd is null then 0 else ElementsToAdd,
+	Interval = if Interval is null then #duration(1,0,0,0) else Interval,
+	numberOfDays = Duration.From(MyEndDate - MyStartDate),
+	numberOfElements = Number.RoundUp(numberOfDays / Interval) + 1 + ElementsToAdd,
+	datesList = List.DateTimes(MyStartDate, numberOfElements, Interval),
+	datesTable = Table.FromList(datesList, Splitter.SplitByNothing(), {"Dates"}, null, ExtraValues.Error),
+	MyTimeTable = Table.TransformColumnTypes(datesTable, {{"Dates", type datetime}})
 in
-    Source
+    MyTimeTable
