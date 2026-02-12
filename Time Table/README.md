@@ -15,16 +15,16 @@ This function is useful for generating **time tables**, **sampling sequences**, 
 ## 📦 Module Structure
 | File | Description | Output |
 |-|-|-|
-| **FnDateTimes.pq** | Main function generating the datetime table. | Datetimes table |
+| **FnDateTimes.powerquerym** | Main function generating the datetime table. | table (datetimes) |
 
 
- ## ⚙️ Function & Parameters
- | Function | Parameter | Type | Required | Description |
- |-|-|-|-|-|
- | `FnDateTimes`| `TheStartDate` | datetime | Yes | Starting datetime of the sequence. |
- | | `TheEndDate` | datetime | No | Ending datetime; if `null`, the current system datetime is used. |
- | | `Interval` | duration | No | Time increment between elements; defaults to 1 day. | 
- | | `ElementsToAdd` | number | No | Additional elements to append after the `TheEndDate`; if `0`, no additional dates will appended. |
+## ⚙️ Function & Parameters
+| Function | Parameter | Type | Required | Description |
+|-|-|-|-|-|
+| `FnDateTimes` | `TheStartDate` | datetime | Yes | Starting datetime of the sequence. |
+| | `TheEndDate` | datetime | No | Ending datetime; if `null`, the current system datetime is used. |
+| | `Interval` | duration | No | Time increment between elements; defaults to 1 day. | 
+| | `ElementsToAdd` | number | No | Additional elements to append after the `TheEndDate`; if `0`, no additional dates will appended. |
 
 
 ## 💡 Usage Example
@@ -58,6 +58,7 @@ Return a datetime table with:
 | 2023/01/22 00:00:00 |
 | ... |
 | ... |
+
 ---
 </details>
 
@@ -83,6 +84,7 @@ Return a datetime table with:
 | ... |
 | 2023/01/26 00:00:00 |
 | 2023/01/27 00:00:00 |
+
 ---
 </details>
 
@@ -109,6 +111,7 @@ Return a datetime table with:
 | ... |
 | 2023/01/26 05:00:00 |
 | 2023/01/26 06:00:00 |
+
 ---
 </details>
 
@@ -136,6 +139,7 @@ Return a datetime table with:
 | ... |
 | 2023/01/26 15:00:00 |
 | 2023/01/26 16:00:00 |
+
 ---
 </details>
 
