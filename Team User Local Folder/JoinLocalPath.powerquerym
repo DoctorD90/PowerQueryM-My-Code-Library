@@ -1,0 +1,25 @@
+(relativePath as text, optional customPrefix as nullable text) as text =>
+let
+    /* Set 'DefaultPrefix' value here
+       You can set 'DefaultPrefix' with your own string 
+       or with a reference to another query name (ex: TeamUserLocalFolder)
+    */
+    DefaultPrefix = TeamUserLocalFolder,
+    
+    // Choose between the custom input or the default QWERTY
+    SelectedPrefix = if customPrefix = null then DefaultPrefix else customPrefix,
+    
+    // Clean trailing backslashes from prefix
+    CleanPrefix = if Text.EndsWith(SelectedPrefix, "\") 
+                  then Text.Start(SelectedPrefix, Text.Length(SelectedPrefix) - 1) 
+                  else SelectedPrefix,
+    
+    // Clean leading backslashes from relative path
+    CleanRelative = if Text.StartsWith(relativePath, "\") 
+                    then Text.Middle(relativePath, 1) 
+                    else relativePath,
+    
+    // Combine both parts
+    Result = CleanPrefix & "\" & CleanRelative
+in
+    Result

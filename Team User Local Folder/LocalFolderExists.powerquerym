@@ -1,0 +1,8 @@
+// Reusable folder existence function
+(LocalFolderPath as text) as logical =>
+let
+    // Return TRUE if folder exists else FALSE
+    test = try File.Contents(LocalFolderPath & "\") otherwise null,
+    exists_test = test = null
+in
+    exists_test

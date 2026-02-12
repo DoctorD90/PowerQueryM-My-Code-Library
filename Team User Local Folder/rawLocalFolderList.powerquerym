@@ -1,0 +1,10 @@
+let
+    // Base path list on dedicated query
+    rawLocalFolderList = {
+        "C:\folder\that\does\not\exist", // as example
+        "C:\Users\dev1\Desktop\syncedFolder",
+        "C:\Users\dev2\Downloads",
+        "C:\Users\dev3\Downloads\dati\"
+    }
+in
+    rawLocalFolderList

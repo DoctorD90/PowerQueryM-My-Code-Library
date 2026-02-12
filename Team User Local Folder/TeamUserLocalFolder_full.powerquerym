@@ -1,0 +1,45 @@
+let
+    // Base path list (also manageable via dedicated query)
+    rawLocalFolderList = {
+        "C:\folder\that\does\not\exist", // as example
+        "C:\Users\dev1\Desktop\syncedFolder",
+        "C:\Users\dev2\Downloads",
+        "C:\Users\dev3\Downloads\dati\"
+    },
+
+    // Reusable folder existence function (also manageable via dedicated query)
+    LocalFolderExists = (LocalFolderPath as text) as logical =>
+        let
+            // Return TRUE if folder exists else FALSE
+            test = try File.Contents(LocalFolderPath & "\") otherwise null,
+            exists = test = null
+        in
+            exists,
+
+    // Normalization: adds a trailing "\" if missing
+    folderList = List.Transform(
+        rawLocalFolderList,
+        each if Text.EndsWith(_, "\") then _ else _ & "\"
+    ),
+
+    // Base path Table
+    folderTable = Table.FromList(folderList, Splitter.SplitByNothing(), {"FolderPath"}),
+
+    // Add boolean column TRUE/FALSE exists column
+    tableWithCheck = Table.AddColumn(
+        folderTable,
+        "Exists",
+        each LocalFolderExists([FolderPath]),
+        type logical
+    ),
+
+    // Returns the first valid route (can be modified according to personal requirements)
+    ValidFolder =
+        let
+            filtered = Table.SelectRows(tableWithCheck, each [Exists] = true)
+        in
+            if Table.RowCount(filtered) > 0
+            then filtered{0}[FolderPath]
+            else null
+in
+    ValidFolder

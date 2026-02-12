@@ -23,6 +23,7 @@ Depending on the complexity of the module, each folder may provide one or more i
 | Folder | Description |
 |-|-|
 | [Time Table](./Time%20Table) | Generating customizable time-based tables between two datetimes, with a configurable step duration. |
+| [Team User Local Folder](./Team%20User%20Local%20Folder) | Managing user‑specific local root-path folders on shared or team‑based cloud-synced machines. |
 
 
 ## ❓ What is Power Query

@@ -1,0 +1,28 @@
+let
+    // Normalization: adds a trailing "\" if missing
+    folderList = List.Transform(
+        rawLocalFolderList,
+        each if Text.EndsWith(_, "\") then _ else _ & "\"
+    ),
+
+    // Base path Table
+    folderTable = Table.FromList(folderList, Splitter.SplitByNothing(), {"FolderPath"}),
+
+    // Add boolean column TRUE/FALSE exists column
+    tableWithCheck = Table.AddColumn(
+        folderTable,
+        "Exists",
+        each LocalFolderExists([FolderPath]),
+        type logical
+    ),
+
+    // Returns the first valid route (can be modified according to personal requirements)
+    ValidFolder =
+        let
+            filtered = Table.SelectRows(tableWithCheck, each [Exists] = true)
+        in
+            if Table.RowCount(filtered) > 0
+            then filtered{0}[FolderPath]
+            else null
+in
+    ValidFolder
